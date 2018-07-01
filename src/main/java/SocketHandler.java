@@ -37,6 +37,12 @@ public class SocketHandler {
         System.out.println("Connected to " + s.getInetAddress() + " on port " + s.getPort());
     }
 
+    /***
+     * Returns PrintStream which returns output from the socket as characters
+     * @param s
+     * @return
+     * @throws IOException
+     */
     public static PrintStream getPrintStream(Socket s) throws IOException
     {
         return new PrintStream(s.getOutputStream());
