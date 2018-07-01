@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.net.Socket;
 
 public class SocketHandler {
@@ -34,5 +35,10 @@ public class SocketHandler {
     public static void printConnectionInformation(Socket s)
     {
         System.out.println("Connected to " + s.getInetAddress() + " on port " + s.getPort());
+    }
+
+    public static PrintStream getPrintStream(Socket s) throws IOException
+    {
+        return new PrintStream(s.getOutputStream());
     }
 }
