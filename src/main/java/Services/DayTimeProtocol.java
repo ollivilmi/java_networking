@@ -8,7 +8,7 @@ import java.net.Socket;
 
 public class DayTimeProtocol {
 
-    public static void DayTimeClient(String host)
+    public static void dayTimeClient(String host)
     {
         Socket socket = null;
 
