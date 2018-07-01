@@ -1,28 +1,22 @@
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.net.Socket;
 
 public class DayTimeProtocol {
+
     public static final int PORT = 13;
 
-    public static void main(String[] args)
+    public static void DayTimeClient(String host, int port)
     {
         Socket socket = null;
-        String timestamp;
 
         try {
-            socket = new Socket(args[0], PORT);
-            InputStream in = socket.getInputStream();
-            InputStreamReader reader = new InputStreamReader(in);
-            System.out.println("Connected to " + socket.getInetAddress() + " on port " + socket.getPort());
+            socket = new Socket(host, port);
 
-            int character;
-            StringBuilder data = new StringBuilder();
+            BufferedReader reader = SocketHandler.getBufferedReader(socket);
+            SocketHandler.printConnectionInformation(socket);
 
-            while ((character = reader.read()) != -1) {
-                data.append((char) character);
-            }
-
-            System.out.println(data);
+            System.out.println("Daytime: " + reader.readLine());
         }
         catch (IOException e)
         {
@@ -30,9 +24,11 @@ public class DayTimeProtocol {
         }
         finally
         {
-            // Force connection to close
-            try { if (socket != null) socket.close(); }
-            catch (IOException e){}
+            SocketHandler.close(socket);
         }
+    }
+
+    public static void main(String[] args) {
+        DayTimeClient(args[0], PORT);
     }
 }
