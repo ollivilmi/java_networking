@@ -1,17 +1,19 @@
+package Services;
+
+import handlers.SocketHandler;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.Socket;
 
 public class DayTimeProtocol {
 
-    public static final int PORT = 13;
-
-    public static void DayTimeClient(String host, int port)
+    public static void DayTimeClient(String host)
     {
         Socket socket = null;
 
         try {
-            socket = new Socket(host, port);
+            socket = new Socket(host, 13);
 
             BufferedReader reader = SocketHandler.getBufferedReader(socket);
             SocketHandler.printConnectionInformation(socket);
@@ -26,9 +28,5 @@ public class DayTimeProtocol {
         {
             SocketHandler.close(socket);
         }
-    }
-
-    public static void main(String[] args) {
-        DayTimeClient(args[0], PORT);
     }
 }
