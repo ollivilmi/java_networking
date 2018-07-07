@@ -1,9 +1,6 @@
 package handlers;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.Socket;
 
 public class SocketHandler {
@@ -30,6 +27,11 @@ public class SocketHandler {
         return new BufferedReader(new InputStreamReader(s.getInputStream()));
     }
 
+    public static DataInputStream getDataInputStream(Socket s) throws IOException
+    {
+        return new DataInputStream(s.getInputStream());
+    }
+
     /***
      * Prints connection information (IP and port) to system.out
      * @param s
@@ -48,5 +50,10 @@ public class SocketHandler {
     public static PrintStream getPrintStream(Socket s) throws IOException
     {
         return new PrintStream(s.getOutputStream());
+    }
+
+    public static BufferedReader clientInput()
+    {
+        return new BufferedReader(new InputStreamReader(System.in));
     }
 }

@@ -1,18 +1,18 @@
+import handlers.SocketHandler;
+import services.ChatServer;
 import services.DayTimeProtocol;
 import services.EchoProtocol;
 import services.URLFileRetriever;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class Menu {
 
     private final BufferedReader USER_INPUT;
 
-    public Menu()
-    {
-        USER_INPUT = new BufferedReader(new InputStreamReader(System.in));
+    public Menu() {
+        USER_INPUT = SocketHandler.clientInput();
     }
 
     public void open() {
@@ -29,6 +29,9 @@ public class Menu {
                     break;
                 case 3:
                     URLFileRetriever.retrieveFileFromURL(getProtocol(), getHostName(), getFileName());
+                    break;
+                case 4:
+                    new ChatServer().start(8205);
                     break;
                 default:
                     System.out.println("Invalid command");
@@ -63,6 +66,7 @@ public class Menu {
 
         System.out.println("1. DayTime protocol");
         System.out.println("2. Echo protocol");
-        System.out.println("3. URL File retriever\n");
+        System.out.println("3. URL File retriever");
+        System.out.println("4. Chat server\n");
     }
 }
