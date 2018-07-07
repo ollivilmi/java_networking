@@ -1,4 +1,3 @@
-import handlers.SocketHandler;
 import services.DayTimeProtocol;
 import services.EchoProtocol;
 import services.MemoryStack.MemoryStackServer;
@@ -6,14 +5,14 @@ import services.URLFileRetriever;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Scanner;
+import java.io.InputStreamReader;
 
 public class Menu {
 
     private final BufferedReader USER_INPUT;
 
     public Menu() {
-        USER_INPUT = SocketHandler.clientInput();
+        USER_INPUT = new BufferedReader(new InputStreamReader(System.in));
     }
 
     public void open() {

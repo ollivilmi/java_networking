@@ -15,6 +15,10 @@ public class MemoryStackConnection extends MessageConnection {
         memory = new Stack<>();
     }
 
+    /***
+     * Pushse or pops messages to a stack.
+     * @param message
+     */
     @Override
     public void handleMessage(String message) {
         String[] messages = message.split(" ");
@@ -38,6 +42,7 @@ public class MemoryStackConnection extends MessageConnection {
 
     @Override
     public void printInstructions() {
+        super.printInstructions();
         out.println("quit - quit connection");
         out.println("push - add message to stack");
         out.println("pop - remove message from stack");

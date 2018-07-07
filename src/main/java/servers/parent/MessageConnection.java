@@ -13,6 +13,14 @@ public abstract class MessageConnection implements Runnable {
     protected BufferedReader in;
     protected PrintStream out;
 
+    /***
+     * Creates a bi-directional TCP message service that can be used with Telnet
+     * on this socket. The handleMessage() must be implemented to process user
+     * inputs to this connection service.
+     *
+     * User input "quit" exits the connection.
+     * @param socket
+     */
     public MessageConnection(Socket socket) {
         this.socket = socket;
         try
@@ -48,7 +56,7 @@ public abstract class MessageConnection implements Runnable {
             }
             out.close();
             in.close();
-            socket.close();
+            SocketHandler.close(socket);
         }
         catch (IOException e)
         {
@@ -58,5 +66,8 @@ public abstract class MessageConnection implements Runnable {
 
     public abstract void handleMessage(String message);
 
-    public abstract void printInstructions();
+    public void printInstructions()
+    {
+        out.println("Instructions: ");
+    }
 }
