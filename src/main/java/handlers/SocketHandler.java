@@ -2,6 +2,7 @@ package handlers;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class SocketHandler {
 
@@ -27,19 +28,20 @@ public class SocketHandler {
         return new BufferedReader(new InputStreamReader(s.getInputStream()));
     }
 
-    public static DataInputStream getDataInputStream(Socket s) throws IOException
+    public static Scanner getScanner(Socket s) throws IOException
     {
-        return new DataInputStream(s.getInputStream());
+        return new Scanner(s.getInputStream());
     }
 
     /***
      * Prints connection information (IP and port) to system.out
      * @param s
      */
-    public static void printConnectionInformation(Socket s)
+    public static String printConnectionInformation(Socket s)
     {
-        System.out.println("Connected to " + s.getInetAddress() + " on port " + s.getPort());
+        return "Connected to " + s.getInetAddress() + " on port " + s.getPort();
     }
+
 
     /***
      * Returns PrintStream which returns output from the socket as characters

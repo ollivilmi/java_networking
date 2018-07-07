@@ -1,19 +1,19 @@
-package servers;
+package services.MemoryStack;
 
 import servers.parent.Server;
 
 import java.net.Socket;
 
-public class ChatServer extends Server {
+public class MemoryStackServer extends Server {
 
-    public ChatServer(int port)
+    public MemoryStackServer(int port)
     {
         super(port);
     }
 
     @Override
     public void createConnection(Socket socket) {
-        ChatConnection connection = new ChatConnection(socket);
+        MemoryStackConnection connection = new MemoryStackConnection(socket);
         new Thread(connection).start();
     }
 }
