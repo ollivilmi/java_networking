@@ -18,6 +18,8 @@ public class LetterServer extends Server {
     @Override
     public void createConnection(Socket socket) {
         LetterConnection connection = new LetterConnection(socket, address, mailBoxPort);
-        new Thread(connection).start();
+        Thread thread = new Thread(connection);
+        thread.isDaemon();
+        thread.start();
     }
 }

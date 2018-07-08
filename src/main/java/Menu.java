@@ -15,14 +15,16 @@ public class Menu {
 
     private final BufferedReader USER_INPUT;
     private Stack<Service> services;
+    private Stack<Thread> threads;
 
     public Menu() {
         USER_INPUT = new BufferedReader(new InputStreamReader(System.in));
+        services = new Stack<>();
+        threads = new Stack<>();
     }
 
     public void open() {
         printServices();
-        services = new Stack<>();
 
         try {
             String input = USER_INPUT.readLine();
@@ -49,10 +51,12 @@ public class Menu {
                     break;
             }
             startServices();
+
             System.out.println("Press enter to kill services...");
             USER_INPUT.readLine();
             closeServices();
 
+            System.exit(0);
         }
         catch (NumberFormatException e) {
             System.out.println("Invalid input: " + e.getMessage());
@@ -64,19 +68,22 @@ public class Menu {
 
     private void startServices()
     {
-        for (Service service : services) {
-            System.out.println("Starting service: " + service.toString());
-            new Thread(service).start();
+        for (Service service : services)
+            threads.push(new Thread(service));
+
+        for (Thread thread : threads) {
+            thread.start();
         }
+
     }
 
     private void closeServices()
     {
-        for (Service service : services) {
-            System.out.println("Closing service: " +service.toString());
+        for (Service service : services)
             service.end();
-        }
-        System.exit(0);
+
+        for (Thread thread : threads)
+            thread.interrupt();
     }
 
     private String getHostName() throws IOException

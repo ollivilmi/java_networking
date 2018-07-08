@@ -9,34 +9,19 @@ import java.util.LinkedList;
 
 public class Mailbox extends Consumer {
 
-    private LinkedList<String> messages;
+    private LinkedList<String> letters;
 
     public Mailbox(int bufferSize, int port) throws IOException {
         super(bufferSize, port);
-        messages = new LinkedList<>();
+        letters = new LinkedList<>();
     }
 
     @Override
     public void handlePacket() {
-        String msg = new String(packet.getData(), StandardCharsets.UTF_8);
+        String msg = new String(packet.getData(), 0, packet.getLength(), StandardCharsets.UTF_8);
         System.out.println(msg);
-
-        switch (msg)
-        {
-            case "empty":
-                sendResponse("Emptying mailbox...");
-                break;
-            case "first":
-                sendResponse("First letter: ");
-                break;
-            case "last":
-                sendResponse("Last letter: ");
-                break;
-            default:
-                messages.add(msg);
-                sendResponse("Message added to mailbox!");
-                break;
-        }
+        letters.add(msg);
+        sendResponse("Message added to mailbox!");
     }
 
     public void sendResponse(String response)
@@ -49,5 +34,14 @@ public class Mailbox extends Consumer {
         {
             System.out.println("Failed to respond to message: " + e.getMessage());
         }
+    }
+
+    @Override
+    public void end()
+    {
+        System.out.println("Emptying mailbox...");
+        while (!letters.isEmpty())
+            System.out.println(letters.pop());
+        super.end();
     }
 }

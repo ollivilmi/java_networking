@@ -14,6 +14,8 @@ public class MemoryStackServer extends Server {
     @Override
     public void createConnection(Socket socket) {
         MemoryStackConnection connection = new MemoryStackConnection(socket);
-        new Thread(connection).start();
+        Thread thread = new Thread(connection);
+        thread.isDaemon();
+        thread.start();
     }
 }
