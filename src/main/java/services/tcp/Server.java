@@ -1,19 +1,28 @@
-package servers.parent;
+package services.tcp;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public abstract class Server {
+public abstract class Server implements Service {
+
+    private int port;
+    private boolean running;
 
     public Server(int port)
     {
+        this.port = port;
+    }
+
+    @Override
+    public void run() {
+        running = true;
+
         try
         {
             ServerSocket serverSocket = new ServerSocket(port);
-            System.out.println("Server now running at port " + port);
 
-            while (true)
+            while (running)
             {
                 Socket socket = serverSocket.accept();
                 createConnection(socket);
@@ -23,6 +32,12 @@ public abstract class Server {
         {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void end()
+    {
+        running = false;
     }
 
     public abstract void createConnection(Socket socket);

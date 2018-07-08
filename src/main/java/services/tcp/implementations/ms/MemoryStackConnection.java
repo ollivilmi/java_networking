@@ -1,6 +1,6 @@
-package services.MemoryStack;
+package services.tcp.implementations.ms;
 
-import servers.parent.MessageConnection;
+import services.tcp.MessageConnection;
 
 import java.net.Socket;
 import java.util.Stack;
@@ -27,7 +27,7 @@ public class MemoryStackConnection extends MessageConnection {
         {
             case "push":
                 if (messages.length != 2) {
-                    out.println("Too many arguments (arg1 = push/pop arg2 = message)");
+                    out.println("Requires 2 arguments (arg1 = push arg2 = message)");
                     return;
                 }
                 memory.push(messages[1]);

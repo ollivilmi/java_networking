@@ -1,6 +1,6 @@
-package services.MemoryStack;
+package services.tcp.implementations.ms;
 
-import servers.parent.Server;
+import services.tcp.Server;
 
 import java.net.Socket;
 

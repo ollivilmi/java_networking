@@ -1,15 +1,20 @@
 import services.DayTimeProtocol;
 import services.EchoProtocol;
-import services.MemoryStack.MemoryStackServer;
+import services.tcp.Service;
+import services.tcp.implementations.ms.MemoryStackServer;
 import services.URLFileRetriever;
+import services.udp.implementations.mb.LetterServer;
+import services.udp.implementations.mb.Mailbox;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Stack;
 
 public class Menu {
 
     private final BufferedReader USER_INPUT;
+    private Stack<Service> services;
 
     public Menu() {
         USER_INPUT = new BufferedReader(new InputStreamReader(System.in));
@@ -17,9 +22,11 @@ public class Menu {
 
     public void open() {
         printServices();
+        services = new Stack<>();
 
         try {
             String input = USER_INPUT.readLine();
+
             switch (Integer.parseInt(input)) {
                 case 1:
                     DayTimeProtocol.dayTimeClient(getHostName());
@@ -31,15 +38,45 @@ public class Menu {
                     URLFileRetriever.retrieveFileFromURL(getProtocol(), getHostName(), getFileName());
                     break;
                 case 4:
-                    new MemoryStackServer(8205);
+                    services.push(new MemoryStackServer(8205));
+                    break;
+                case 5:
+                    services.push(new Mailbox(1024, 8206));
+                    services.push(new LetterServer(8205, 8206, "localhost"));
                     break;
                 default:
                     System.out.println("Invalid command");
                     break;
             }
-        } catch (IOException e) {
-            System.out.println("Invalid command.");
+            startServices();
+            System.out.println("Press enter to kill services...");
+            USER_INPUT.readLine();
+            closeServices();
+
         }
+        catch (NumberFormatException e) {
+            System.out.println("Invalid input: " + e.getMessage());
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void startServices()
+    {
+        for (Service service : services) {
+            System.out.println("Starting service: " + service.toString());
+            new Thread(service).start();
+        }
+    }
+
+    private void closeServices()
+    {
+        for (Service service : services) {
+            System.out.println("Closing service: " +service.toString());
+            service.end();
+        }
+        System.exit(0);
     }
 
     private String getHostName() throws IOException
@@ -67,6 +104,7 @@ public class Menu {
         System.out.println("1. DayTime protocol");
         System.out.println("2. Echo protocol");
         System.out.println("3. URL File retriever");
-        System.out.println("4. Memory stack server\n");
+        System.out.println("4. Memory stack server");
+        System.out.println("5. UDP Mailbox server\n");
     }
 }

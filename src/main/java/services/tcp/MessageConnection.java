@@ -1,4 +1,4 @@
-package servers.parent;
+package services.tcp;
 
 import handlers.SocketHandler;
 
@@ -12,6 +12,7 @@ public abstract class MessageConnection implements Runnable {
     protected Socket socket;
     protected BufferedReader in;
     protected PrintStream out;
+    private Boolean connected;
 
     /***
      * Creates a bi-directional TCP message service that can be used with Telnet
@@ -28,6 +29,7 @@ public abstract class MessageConnection implements Runnable {
             in = SocketHandler.getBufferedReader(socket);
             out = SocketHandler.getPrintStream(socket);
             out.println(SocketHandler.printConnectionInformation(socket));
+            connected = true;
         }
         catch (IOException e)
         {
@@ -38,11 +40,11 @@ public abstract class MessageConnection implements Runnable {
     @Override
     public void run() {
         try {
-            Boolean connected = true;
+            connected = true;
             String message;
 
             // Dispose of Telnet input garbage
-            out.println("Press any button to start...");
+            out.println("Press enter to start...");
             in.readLine();
             printInstructions();
 
